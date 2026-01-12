@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:13:41 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 10:14:10 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 11:32:06 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	exec_external_cmd(t_command *cmd, t_shell *shell)
 {
 	char	**args_array;
 
-	args_array = convert_args_to_array(cmd->args);
+	args_array = args_to_array(cmd->args);
 	if (!args_array)
 	{
 		cleanup_child(shell);

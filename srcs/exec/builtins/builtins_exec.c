@@ -6,30 +6,17 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 23:05:52 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 10:34:21 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 11:31:03 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
 
-char	**convert_args_for_builtins(t_arg *args)
+static int	count_args(t_arg *args)
 {
-	char	**result;
 	int		count;
-	int		i;
 	t_arg	*current;
 
-	// Cas liste vide → retourne tableau avec NULL
-	if (!args)
-	{
-		result = (char **)malloc(sizeof(char *) * 1);
-		if (!result)
-			return (NULL);
-		result[0] = NULL;
-		return (result);
-	}
-
-	// ✅ Compte les éléments en parcourant la LISTE CHAÎNÉE
 	count = 0;
 	current = args;
 	while (current)
@@ -37,23 +24,28 @@ char	**convert_args_for_builtins(t_arg *args)
 		count++;
 		current = current->next;
 	}
+	return (count);
+}
 
-	// Allocation du tableau (+1 pour NULL final)
-	result = (char **)malloc(sizeof(char *) * (count + 1));
+char	**args_to_array(t_arg *args)
+{
+	char	**result;
+	int		i;
+	t_arg	*current;
+
+	if (!args)
+		return (NULL);
+	result = (char **)malloc(sizeof(char *) * (count_args(args) + 1));
 	if (!result)
 		return (NULL);
-
-	// ✅ Remplissage en parcourant la LISTE CHAÎNÉE
 	i = 0;
 	current = args;
 	while (current)
 	{
-		result[i] = current->value;
+		result[i++] = current->value;
 		current = current->next;
-		i++;
 	}
 	result[i] = NULL;
-
 	return (result);
 }
 
@@ -89,7 +81,7 @@ int	execute_builtin(t_command *cmd, t_shell *shell)
 
 	if (!cmd || !cmd->args || !cmd->args->value)
 		return (1);
-	args_array = convert_args_for_builtins(cmd->args);
+	args_array = args_to_array(cmd->args);
 	if (!args_array)
 		return (1);
 	is_exit_cmd = (ft_strcmp(args_array[0], "exit") == 0);

@@ -6,48 +6,42 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 10:10:25 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 11:31:21 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
 
-char	**convert_args_to_array(t_arg *args)
-{
-	char	**result;
-	int		count;
-	int		i;
-	t_arg	*current;
+// char	**convert_args_to_array(t_arg *args)
+// {
+// 	char	**result;
+// 	int		count;
+// 	int		i;
+// 	t_arg	*current;
 
-	if (!args)
-		return (NULL);
-
-	// ✅ Compte avec LISTE CHAÎNÉE
-	count = 0;
-	current = args;
-	while (current)
-	{
-		count++;
-		current = current->next;
-	}
-
-	result = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!result)
-		return (NULL);
-
-	// ✅ Remplissage avec LISTE CHAÎNÉE
-	i = 0;
-	current = args;
-	while (current)
-	{
-		result[i] = current->value;
-		current = current->next;
-		i++;
-	}
-	result[i] = NULL;
-
-	return (result);
-}
+// 	if (!args)
+// 		return (NULL);
+// 	count = 0;
+// 	current = args;
+// 	while (current)
+// 	{
+// 		count++;
+// 		current = current->next;
+// 	}
+// 	result = (char **)malloc(sizeof(char *) * (count + 1));
+// 	if (!result)
+// 		return (NULL);
+// 	i = 0;
+// 	current = args;
+// 	while (current)
+// 	{
+// 		result[i] = current->value;
+// 		current = current->next;
+// 		i++;
+// 	}
+// 	result[i] = NULL;
+// 	return (result);
+// }
 
 void	update_exit_status(t_shell *shell, int last_status, int sig_int,
 		int sig_quit)

@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 13:32:52 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 10:51:37 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 11:19:31 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static int	handle_input_redirections(t_redir *input_list)
 	last_redir = get_last_redir(input_list);
 	if (!last_redir || !last_redir->file)
 	{
-		// ft_putstr_fd("minishell: ambiguous redirect\n", 2);
 		return (1);
 	}
 	fd = open_input_file(last_redir);
@@ -46,7 +45,6 @@ static int	process_intermediate_outputs(t_redir *current)
 	{
 		if (!current->file)
 		{
-			// ft_putstr_fd("minishell: ambiguous redirect\n", 2);
 			return (1);
 		}
 		fd = open_output_file(current);
@@ -64,7 +62,6 @@ static int	handle_last_output(t_redir *last_redir)
 
 	if (!last_redir->file)
 	{
-		// ft_putstr_fd("minishell: ambiguous redirect\n", 2);
 		return (1);
 	}
 	fd = open_output_file(last_redir);

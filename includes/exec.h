@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 11:01:22 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 09:47:39 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 11:30:29 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int     should_expand(char *delimiter);
 char    *clean_delimiter(char *delimiter);
 
 // builtins_exec.c
-char	**convert_args_for_builtins(t_arg *args);
+// char	**convert_args_for_builtins(t_arg *args);
 
 // export_helpers.c
 t_env	*exp_create_env_node(const char *key, const char *value);
@@ -128,11 +128,12 @@ int	open_output_file(t_redir *redir);
 void	setup_pipes(t_command *cmd, int prev_pipe[2], int curr_pipe[2]);
 void	update_exit_status(t_shell *shell, int last_status, int sig_int,
 		int sig_quit);
-char	**convert_args_to_array(t_arg *args);
+// char	**convert_args_to_array(t_arg *args);
 void	check_special_cases(char *cmd, t_shell *shell, char **args_array);
 int	prepare_pipe(t_command *cmd, int prev_pipe[2], int curr_pipe[2]);
 void	handle_parent_pipes(t_command *cmd, int prev[2], int curr[2]);
 int	fork_handler(t_shell *sh, t_command *cmd, int prev[2], int curr[2]);
 char	*try_paths(char **paths, char *cmd);
 int	ft_atoll_safe(const char *str, long long *result);
+char	**args_to_array(t_arg *args);
 #endif
