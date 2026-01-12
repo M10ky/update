@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 08:17:14 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 10:10:25 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,35 @@ char	**convert_args_to_array(t_arg *args)
 	char	**result;
 	int		count;
 	int		i;
+	t_arg	*current;
 
 	if (!args)
 		return (NULL);
+
+	// ✅ Compte avec LISTE CHAÎNÉE
 	count = 0;
-	while (args[count].value)
+	current = args;
+	while (current)
+	{
 		count++;
+		current = current->next;
+	}
+
 	result = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!result)
 		return (NULL);
+
+	// ✅ Remplissage avec LISTE CHAÎNÉE
 	i = 0;
-	while (i < count)
+	current = args;
+	while (current)
 	{
-		result[i] = args[i].value;
+		result[i] = current->value;
+		current = current->next;
 		i++;
 	}
 	result[i] = NULL;
+
 	return (result);
 }
 

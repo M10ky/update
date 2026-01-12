@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 23:05:52 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 07:57:43 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 10:34:21 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ char	**convert_args_for_builtins(t_arg *args)
 	char	**result;
 	int		count;
 	int		i;
+	t_arg	*current;
 
+	// Cas liste vide → retourne tableau avec NULL
 	if (!args)
 	{
 		result = (char **)malloc(sizeof(char *) * 1);
@@ -26,19 +28,32 @@ char	**convert_args_for_builtins(t_arg *args)
 		result[0] = NULL;
 		return (result);
 	}
+
+	// ✅ Compte les éléments en parcourant la LISTE CHAÎNÉE
 	count = 0;
-	while (args[count].value)
+	current = args;
+	while (current)
+	{
 		count++;
+		current = current->next;
+	}
+
+	// Allocation du tableau (+1 pour NULL final)
 	result = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!result)
 		return (NULL);
+
+	// ✅ Remplissage en parcourant la LISTE CHAÎNÉE
 	i = 0;
-	while (i < count)
+	current = args;
+	while (current)
 	{
-		result[i] = args[i].value;
+		result[i] = current->value;
+		current = current->next;
 		i++;
 	}
 	result[i] = NULL;
+
 	return (result);
 }
 
@@ -70,12 +85,14 @@ int	execute_builtin(t_command *cmd, t_shell *shell)
 {
 	int		result;
 	char	**args_array;
+	int		is_exit_cmd;
 
-	if (!cmd || !cmd->args || !cmd->args[0].value)
+	if (!cmd || !cmd->args || !cmd->args->value)
 		return (1);
 	args_array = convert_args_for_builtins(cmd->args);
 	if (!args_array)
 		return (1);
+	is_exit_cmd = (ft_strcmp(args_array[0], "exit") == 0);
 	result = execute_builtin_part1(shell, args_array);
 	if (result != -1)
 	{
@@ -83,7 +100,7 @@ int	execute_builtin(t_command *cmd, t_shell *shell)
 		return (result);
 	}
 	result = execute_builtin_part2(shell, args_array);
-	if (ft_strcmp(args_array[0], "exit") != 0)
+	if (!is_exit_cmd || result != 0)
 		free(args_array);
 	return (result);
 }

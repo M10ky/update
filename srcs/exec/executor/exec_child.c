@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:13:41 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 08:17:38 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 10:14:10 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ void	child_process(t_command *cmd, t_shell *shell, int prev[2], int curr[2])
 		cleanup_child(shell);
 		exit(1);
 	}
-	if (!cmd->args || !cmd->args[0].value)
+	if (!cmd->args || !cmd->args->value)
 	{
 		cleanup_child(shell);
 		exit(0);
 	}
-	if (is_builtin(cmd->args[0].value))
+	if (is_builtin(cmd->args->value))
 		exec_builtin_child(cmd, shell);
 	else
 		exec_external_cmd(cmd, shell);
