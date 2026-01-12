@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 09:40:43 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/12 07:45:51 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/12 15:49:32 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,35 @@
 
 void	init_shell(t_shell *shell, char **envp)
 {
-	char	*cwd;
+	/* Initialiser l'environnement depuis envp */
+	init_env(shell, envp);
 
-	shell->env = dup_env(envp);
+	/* Si l'environnement est complètement vide (env -i), créer un minimum */
 	if (!shell->env)
 	{
+		char	*cwd;
+		t_env	*pwd_node;
+		t_env	*shlvl_node;
+		t_env	*underscore_node;
+
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
 			cwd = ft_strdup("/");
-		shell->env = create_env_node("PWD", cwd);
+
+		pwd_node = new_env_node_kv("PWD", cwd);
+		shlvl_node = new_env_node_kv("SHLVL", "1");
+		underscore_node = new_env_node_kv("_", "/usr/bin/env");
+
 		free(cwd);
+
+		if (pwd_node)
+			shell->env = pwd_node;
+		if (shlvl_node)
+			add_env_node(&shell->env, shlvl_node);
+		if (underscore_node)
+			add_env_node(&shell->env, underscore_node);
 	}
+
 	shell->input = NULL;
 	shell->tokens = NULL;
 	shell->commands = NULL;

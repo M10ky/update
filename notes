@@ -1,4 +1,49 @@
+1 -
 minishell$> export val1 1val val2
 export: `1val': not a valid identifier
 minishell$> echo $?
 0
+Au lieu de 1
+
+bash:
+miokrako@c1r5s4:~/Music/Minishell12$ export val1 1val val2
+bash: export: `1val': not a valid identifier
+miokrako@c1r5s4:~/Music/Minishell12$ echo $?
+1
+
+2 -
+minishell$> > 1 > 2  // cree 1 et 2
+minishell$> ls
+1 includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh
+
+
+bash:
+miokrako@c1r5s4:~/Music/Minishell12$ > 1 > 2
+miokrako@c1r5s4:~/Music/Minishell12$ ls
+1  2  includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh
+
+3 -
+minishell$> ^C
+minishell$> ^C
+minishell$> echo $?
+0
+minishell$>
+
+bash:
+miokrako@c1r5s4:~/Music/Minishell12$ ^C
+miokrako@c1r5s4:~/Music/Minishell12$ echo $?
+130
+
+4-
+minishell$> env
+PWD=/home/miokrako/Music/Minishell12
+minishell$>
+
+bash:
+c1r5s4% env -i bash
+miokrako@c1r5s4:/home/miokrako/Music/Minishell12$ env
+PWD=/home/miokrako/Music/Minishell12
+SHLVL=1
+_=/usr/bin/env
+miokrako@c1r5s4:/home/miokrako/Music/Minishell12$
+

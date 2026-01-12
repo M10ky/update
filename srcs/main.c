@@ -6,23 +6,13 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 09:40:43 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/12 14:00:29 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 15:24:52 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/exec.h"
 
 int	g_received_signal = 0;
-
-static void	handle_sigint(int sig)
-{
-	(void)sig;
-	g_received_signal = sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
 
 static void	process_input(t_shell *shell)
 {
@@ -39,14 +29,26 @@ static void	process_input(t_shell *shell)
 	}
 }
 
+static void	check_interrupted_signal(t_shell *shell)
+{
+	if (g_received_signal == SIGINT)
+	{
+		shell->last_exit_status = 130;
+		g_received_signal = 0;
+	}
+}
+
 static void	minishell_loop(t_shell *shell)
 {
 	while (1)
 	{
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGTSTP, SIG_IGN);
+		setup_prompt_signal();
+		g_received_signal = 0;
 		shell->input = readline("minishell$> ");
+
+		/* Vérifier si Ctrl+C a été pressé pendant readline */
+		check_interrupted_signal(shell);
+
 		if (!shell->input)
 		{
 			printf("exit\n");
