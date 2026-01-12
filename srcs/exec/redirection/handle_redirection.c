@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 13:32:52 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 16:24:25 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 17:39:57 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static int	handle_all_output_redirections(t_redir *output_list)
 		{
 			if (dup2(fd, STDOUT_FILENO) == -1)
 			{
-				perror("minishell: dup2");
 				close(fd);
 				return (1);
 			}
