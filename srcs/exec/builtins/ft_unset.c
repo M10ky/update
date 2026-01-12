@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:41:18 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/12 09:22:52 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 13:52:59 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	ft_unset(t_shell *shell, char **args)
 		if (!is_valid_identifier(args[i]))
 		{
 			printf("unset: `%s': not a valid identifier\n", args[i]);
+			shell->last_exit_status = 1;
 			error = 1;
 		}
 		else
