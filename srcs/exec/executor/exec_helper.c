@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/13 06:27:03 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 06:53:46 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,14 @@ void	check_special_cases(char *cmd, t_shell *shell, char **args_array)
 		cleanup_child(shell);
 		exit(127);
 	}
+}
+
+void	handle_command_not_found(char *cmd, char **args, t_shell *shell)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	free(args);
+	cleanup_child(shell);
+	exit(127);
 }

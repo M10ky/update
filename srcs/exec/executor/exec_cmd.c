@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:32:05 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/13 06:25:18 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 07:04:00 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,15 @@ char	*try_paths(char **paths, char *cmd)
 	return (NULL);
 }
 
+static void	cleanup_and_exit(char *path, char **args_array,
+	t_shell *shell, int code)
+{
+	free(path);
+	free(args_array);
+	cleanup_child(shell);
+	exit(code);
+}
+
 static void	handle_exec_error(char *cmd, char *path, char **args_array,
 		t_shell *shell)
 {
@@ -44,37 +53,18 @@ static void	handle_exec_error(char *cmd, char *path, char **args_array,
 	if (access(path, F_OK) == -1)
 	{
 		ft_error(": No such file or directory\n", cmd);
-		free(path);
-		free(args_array);
-		cleanup_child(shell);
-		exit(127);
+		cleanup_and_exit(path, args_array, shell, 127);
 	}
 	if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 	{
 		ft_error(": is a directory\n", cmd);
-		free(path);
-		free(args_array);
-		cleanup_child(shell);
-		exit(126);
+		cleanup_and_exit(path, args_array, shell, 126);
 	}
 	if (access(path, X_OK) == -1)
 	{
 		ft_error(": Permission denied\n", cmd);
-		free(path);
-		free(args_array);
-		cleanup_child(shell);
-		exit(126);
+		cleanup_and_exit(path, args_array, shell, 126);
 	}
-}
-
-static void	handle_command_not_found(char *cmd, char **args, t_shell *shell)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found\n", 2);
-	free(args);
-	cleanup_child(shell);
-	exit(127);
 }
 
 static void	try_shell_exec(char *path, char **env_tab)

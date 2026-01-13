@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 11:01:22 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 22:07:16 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/13 06:54:03 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ void	reset_loop(t_shell *shell);
 void	cleanup_exit(t_shell *shell);
 int		is_exit_command(char *input);
 void	ft_error(char *str, char *cmd);
+void	handle_command_not_found(char *cmd, char **args, t_shell *shell);
 
 #endif
