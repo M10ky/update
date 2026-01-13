@@ -76,3 +76,25 @@ bash-5.1$ cat
 bash-5.1$ cat | ls
 includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh
 ^C
+
+
+
+
+
+minishell$> export PATH=
+minishell$> ls
+minishell: ls: command not found
+minishell$> cat
+minishell: cat: command not found
+minishell$> clear
+minishell: clear: command not found
+minishell$>
+
+bash-5.2$ export PATH=
+bash-5.2$ ls
+bash: ls: Aucun fichier ou dossier de ce nom
+bash-5.2$ cat
+bash: cat: Aucun fichier ou dossier de ce nom
+bash-5.2$ clear
+bash: clear: Aucun fichier ou dossier de ce nom
+bash-5.2$

@@ -32,6 +32,7 @@ SRCS_EXEC    = srcs/exec/executor/exec.c \
               srcs/exec/executor/exec_helper.c \
               srcs/exec/executor/exec_cmd.c \
               srcs/exec/executor/pipe_and_fork.c \
+              srcs/exec/executor/wait_children.c \
               srcs/exec/builtins/builtins.c \
               srcs/exec/builtins/builtins_parent.c \
               srcs/exec/builtins/builtins_exec.c \
