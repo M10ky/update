@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
+/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:41:18 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/13 12:40:52 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 14:05:41 by tarandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

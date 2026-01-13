@@ -74,7 +74,7 @@ all: $(NAME)
 $(NAME): $(LIBFT) $(OBJS)
 	@echo "Compiling Minishell..."
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
-	@echo "✅ Minishell ready!"
+	@echo "Minishell ready!"
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
