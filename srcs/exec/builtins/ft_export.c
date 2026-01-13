@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:37:54 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/13 14:05:40 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/13 22:33:10 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
-
-static int	is_valid_identifier_export(const char *str)
-{
-	int	i;
-
-	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
-		return (0);
-	i = 1;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 static void	print_export(t_shell *shell)
 {
@@ -43,14 +27,50 @@ static void	print_export(t_shell *shell)
 	}
 }
 
+static int	is_append_mode(const char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i] && arg[i] != '=')
+		i++;
+	if (i > 0 && arg[i - 1] == '+' && arg[i] == '=')
+		return (1);
+	return (0);
+}
+
+static int	handle_append_export(t_shell *shell, char *key, char *value)
+{
+	char	*old_val;
+	char	*new_val;
+
+	if (key && key[ft_strlen(key) - 1] == '+')
+		key[ft_strlen(key) - 1] = '\0';
+	old_val = get_env_value(shell->env, key);
+	if (old_val)
+	{
+		new_val = ft_strjoin(old_val, value);
+		update_or_add_env(shell, key, new_val);
+		free(new_val);
+	}
+	else
+		update_or_add_env(shell, key, value);
+	free(value);
+	return (0);
+}
+
 static int	process_export_arg(t_shell *shell, char *arg)
 {
 	char	*key;
 	char	*value;
+	int		append;
 
+	append = is_append_mode(arg);
 	key = extract_key(arg);
 	value = extract_value(arg);
-	if (value)
+	if (append && value)
+		handle_append_export(shell, key, value);
+	else if (value)
 	{
 		update_or_add_env(shell, key, value);
 		free(value);
@@ -77,10 +97,7 @@ int	ft_export(t_shell *shell, char **args)
 	{
 		if (!is_valid_identifier_export(args[i]))
 		{
-			ft_putstr_fd("export: ", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putstr_fd(" : not a valid identifier\n", 2);
-			has_error = 1;
+			has_error = handle_export_error(args[i]);
 			i++;
 			continue ;
 		}

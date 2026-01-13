@@ -6,24 +6,24 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:13:41 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/13 21:55:25 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 22:45:43 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
 
-static void	check_signal(int status, int *sig_int, int *sig_quit)
+static void	check_last_process_signal(int status, pid_t wpid,
+	pid_t last_pid, int *last_sig_quit)
 {
-	if (WIFSIGNALED(status))
+	if (wpid == last_pid && WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGINT)
-			*sig_int = 1;
-		else if (WTERMSIG(status) == SIGQUIT)
-			*sig_quit = 1;
+		if (WTERMSIG(status) == SIGQUIT)
+			*last_sig_quit = 1;
 	}
 }
 
-static void	wait_loop(pid_t last_pid, int *last_status, int sig[2])
+static void	wait_loop(pid_t last_pid, int *last_status,
+	int *any_sig_int, int *last_sig_quit)
 {
 	pid_t	wpid;
 	int		status;
@@ -33,7 +33,9 @@ static void	wait_loop(pid_t last_pid, int *last_status, int sig[2])
 		wpid = waitpid(-1, &status, 0);
 		if (wpid == -1)
 			break ;
-		check_signal(status, &sig[0], &sig[1]);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			*any_sig_int = 1;
+		check_last_process_signal(status, wpid, last_pid, last_sig_quit);
 		if (wpid == last_pid)
 			*last_status = status;
 	}
@@ -42,14 +44,15 @@ static void	wait_loop(pid_t last_pid, int *last_status, int sig[2])
 void	wait_all_children(pid_t last_pid, t_shell *shell)
 {
 	int	last_status;
-	int	sig[2];
+	int	any_sig_int;
+	int	last_sig_quit;
 
-	sig[0] = 0;
-	sig[1] = 0;
+	any_sig_int = 0;
+	last_sig_quit = 0;
 	last_status = 0;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	wait_loop(last_pid, &last_status, sig);
+	wait_loop(last_pid, &last_status, &any_sig_int, &last_sig_quit);
 	setup_prompt_signal();
-	update_exit_status(shell, last_status, sig[0], sig[1]);
+	update_exit_status(shell, last_status, any_sig_int, last_sig_quit);
 }

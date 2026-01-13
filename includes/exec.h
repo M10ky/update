@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 11:01:22 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/13 12:38:21 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/13 22:33:48 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,7 @@ void	cleanup_exit(t_shell *shell);
 int		is_exit_command(char *input);
 void	handle_command_not_found(char *cmd, char **args, t_shell *shell);
 void	init_oldpwd(t_env **env);
+int		is_valid_identifier_export(const char *str);
+int		handle_export_error(char *arg);
 
 #endif
