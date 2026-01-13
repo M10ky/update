@@ -3,35 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
+/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 09:40:43 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/13 12:18:36 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 12:27:40 by tarandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/exec.h"
 
-// static char	*ft_getpwd(void)
-// {
-// 	char	*cwd;
+static void	if_env(t_env	*shlvl_node, t_env *underscore_node,
+					t_env *oldpwd_node, t_shell *shell)
+{
+	if (shlvl_node)
+		add_env_node(&shell->env, shlvl_node);
+	if (underscore_node)
+		add_env_node(&shell->env, underscore_node);
+	if (oldpwd_node)
+		add_env_node(&shell->env, oldpwd_node);
+}
 
-// 	cwd = getcwd(NULL, 0);
-// 	if (!cwd)
-// 		cwd = ft_strdup("/");
-// 	return (cwd);
-// }
 void	init_shell(t_shell *shell, char **envp)
 {
+	char	*cwd;
+	t_env	*pwd_node;
+	t_env	*shlvl_node;
+	t_env	*underscore_node;
+	t_env	*oldpwd_node;
+
 	init_env(shell, envp);
 	if (!shell->env)
 	{
-		char	*cwd;
-		t_env	*pwd_node;
-		t_env	*shlvl_node;
-		t_env	*underscore_node;
-		t_env	*oldpwd_node;  // ✅ AJOUT
-
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
 			cwd = ft_strdup("/");
@@ -40,15 +42,9 @@ void	init_shell(t_shell *shell, char **envp)
 		underscore_node = new_env_node_kv("_", "/usr/bin/env");
 		oldpwd_node = new_env_node_kv("OLDPWD", "");
 		free(cwd);
-
 		if (pwd_node)
 			shell->env = pwd_node;
-		if (shlvl_node)
-			add_env_node(&shell->env, shlvl_node);
-		if (underscore_node)
-			add_env_node(&shell->env, underscore_node);
-		if (oldpwd_node)  // ✅ AJOUT
-			add_env_node(&shell->env, oldpwd_node);
+		if_env(shlvl_node, underscore_node, oldpwd_node, shell);
 	}
 	shell->input = NULL;
 	shell->tokens = NULL;
