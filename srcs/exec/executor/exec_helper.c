@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/13 12:25:56 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 13:43:00 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,7 @@ char	*get_path(t_env *env, char *cmd)
 	}
 	path_var = get_env_value(env, "PATH");
 	if (!path_var)
-	{
-		path_var = "/usr/local/bin:/usr/bin:\
-		/bin:/usr/local/sbin:/usr/sbin:/sbin";
-	}
+		return (NULL);
 	paths = ft_split(path_var, ':');
 	if (!paths)
 		return (NULL);
@@ -78,10 +75,10 @@ void	check_special_cases(char *cmd, t_shell *shell, char **args_array)
 {
 	if (ft_strcmp(cmd, ".") == 0)
 	{
-		ft_putstr_fd("minishell: .: filename argument required\n", 2);
+		ft_putstr_fd("minishell: ..: command not found\n", 2);
 		free(args_array);
 		cleanup_child(shell);
-		exit(2);
+		exit(127);
 	}
 	if (ft_strcmp(cmd, "..") == 0)
 	{
