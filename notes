@@ -12,7 +12,6 @@ miokrako@c1r5s4:~/Music/Minishell12$ echo $?
 1
 
 2 -
-
 minishell$> > 1 > 2
 minishell$> ls
 1  includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh

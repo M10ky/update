@@ -1,6 +1,6 @@
 NAME        = minishell
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g3
+CFLAGS      = -Wall -Wextra -Werror
 LIBFT_DIR   = ./libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 INCLUDES    = -I./includes -I. -I$(LIBFT_DIR)
@@ -61,6 +61,7 @@ SRCS_EXEC    = srcs/exec/executor/exec.c \
               srcs/exec/utils/utils_env_node.c \
               srcs/exec/utils/utils_env.c \
               srcs/exec/utils/utils_free.c \
+              srcs/exec/utils/ft_error.c \
               srcs/exec/signal/signal.c \
               srcs/exec/signal/handler.c \
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
+/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 09:40:43 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/12 16:26:27 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 16:32:21 by tarandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

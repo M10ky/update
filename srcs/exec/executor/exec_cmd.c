@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
+/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:32:05 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 09:41:16 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 22:10:33 by tarandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,21 @@ static void	handle_exec_error(char *cmd, char *path)
 {
 	struct stat	path_stat;
 
+	if (access(path, F_OK) == -1)
+	{
+		ft_error(": No such file or directory\n", cmd);
+		free(path);
+		exit(127);
+	}
 	if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		ft_error(": is a directory\n", cmd);
 		free(path);
 		exit(126);
 	}
 	if (access(path, X_OK) == -1)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": Permission denied\n", 2);
+		ft_error(": Permission denied\n", cmd);
 		free(path);
 		exit(126);
 	}

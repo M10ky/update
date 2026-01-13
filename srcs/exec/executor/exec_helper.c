@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
+/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 11:31:21 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/12 22:03:29 by tarandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ char	*get_path(t_env *env, char *cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
-		if (access(cmd, F_OK) == -1)
-			return (NULL);
 		return (ft_strdup(cmd));
 	}
 	path_var = get_env_value(env, "PATH");
