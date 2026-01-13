@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:37:54 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/12 17:33:24 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 12:42:37 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ int	ft_export(t_shell *shell, char **args)
 	{
 		if (!is_valid_identifier_export(args[i]))
 		{
-			printf("export: `%s': not a valid identifier\n", args[i]);
+			ft_putstr_fd("export: ", 2);
+			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd(" : not a valid identifier\n", 2);
 			has_error = 1;
 			i++;
 			continue ;
