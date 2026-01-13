@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/13 06:53:46 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 11:43:12 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	setup_pipes(t_command *cmd, int prev_pipe[2], int curr_pipe[2])
 		}
 	}
 }
-
 char	*get_path(t_env *env, char *cmd)
 {
 	char	*path_var;
@@ -56,11 +55,16 @@ char	*get_path(t_env *env, char *cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
+		if (access(cmd, F_OK) == -1)
+			return (NULL);
 		return (ft_strdup(cmd));
 	}
 	path_var = get_env_value(env, "PATH");
 	if (!path_var)
-		return (NULL);
+	{
+		// ✅ AJOUT: Utiliser un PATH par défaut conforme POSIX
+		path_var = "/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin";
+	}
 	paths = ft_split(path_var, ':');
 	if (!paths)
 		return (NULL);
