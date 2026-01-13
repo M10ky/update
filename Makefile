@@ -18,7 +18,7 @@ SRCS_PARSING = srcs/parsing/lexer/lexer.c \
               srcs/parsing/parser/parser_free.c \
               srcs/parsing/expander/expander.c \
               srcs/parsing/expander/expander_utils.c \
-              srcs/parsing/expander/expander_redir.c \
+              srcs/parsing/expander/expander_word.c \
               srcs/parsing/expander/expander_process.c \
               srcs/parsing/expander/expander_process2.c \
               srcs/parsing/utils/ft_strcmp.c \

@@ -48,3 +48,31 @@ SHLVL=1
 _=/usr/bin/env
 miokrako@c1r5s4:/home/miokrako/Music/Minishell12$
 
+
+
+voici les comportement de mon minishell sur les signals par rapport au vrai bash, analysez les,
+
+il semble que Ctrl + C se comporte bien mais analysez
+minishell$> cat
+^\Quit (core dumped)
+minishell$> cat | ls
+includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh
+^\minishell$>
+
+bash-5.1$ cat
+^\Quit (core dumped)
+bash-5.1$ cat | ls
+includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh
+^\bash-5.1$
+
+minishell$> cat
+^C
+minishell$> cat | ls
+includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh
+^Cminishell$>
+
+bash-5.1$ cat
+^C
+bash-5.1$ cat | ls
+includes  libft  Makefile  minishell  notes  rl.supp  srcs  t1.sh
+^C

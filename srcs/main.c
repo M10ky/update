@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 09:40:43 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/13 14:35:28 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 16:48:18 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	g_received_signal = 0;
 static void	process_input(t_shell *shell)
 {
 	signal(SIGINT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
 	shell->tokens = lexer(shell->input);
 	if (shell->tokens)
 	{
