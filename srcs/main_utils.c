@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 09:40:43 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/13 11:58:37 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 12:18:36 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	init_shell(t_shell *shell, char **envp)
 		pwd_node = new_env_node_kv("PWD", cwd);
 		shlvl_node = new_env_node_kv("SHLVL", "1");
 		underscore_node = new_env_node_kv("_", "/usr/bin/env");
-		oldpwd_node = new_env_node_kv("OLDPWD", "");  // ✅ AJOUT
+		oldpwd_node = new_env_node_kv("OLDPWD", "");
 		free(cwd);
 
 		if (pwd_node)
