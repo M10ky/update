@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:32:05 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 22:10:33 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/13 06:25:18 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ char	*try_paths(char **paths, char *cmd)
 	return (NULL);
 }
 
-static void	handle_exec_error(char *cmd, char *path)
+static void	handle_exec_error(char *cmd, char *path, char **args_array,
+		t_shell *shell)
 {
 	struct stat	path_stat;
 
@@ -44,18 +45,24 @@ static void	handle_exec_error(char *cmd, char *path)
 	{
 		ft_error(": No such file or directory\n", cmd);
 		free(path);
+		free(args_array);
+		cleanup_child(shell);
 		exit(127);
 	}
 	if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 	{
 		ft_error(": is a directory\n", cmd);
 		free(path);
+		free(args_array);
+		cleanup_child(shell);
 		exit(126);
 	}
 	if (access(path, X_OK) == -1)
 	{
 		ft_error(": Permission denied\n", cmd);
 		free(path);
+		free(args_array);
+		cleanup_child(shell);
 		exit(126);
 	}
 }
@@ -102,7 +109,7 @@ void	exec_simple_cmd_with_array(t_command *cmd, t_env *env,
 	path = get_path(env, args_array[0]);
 	if (!path)
 		handle_command_not_found(args_array[0], args_array, shell);
-	handle_exec_error(args_array[0], path);
+	handle_exec_error(args_array[0], path, args_array, shell);
 	env_tab = env_to_tab(env);
 	execve(path, args_array, env_tab);
 	try_shell_exec(path, env_tab);

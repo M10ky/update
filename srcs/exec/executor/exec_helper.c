@@ -3,45 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/12 22:03:29 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/13 06:27:03 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
-
-// char	**convert_args_to_array(t_arg *args)
-// {
-// 	char	**result;
-// 	int		count;
-// 	int		i;
-// 	t_arg	*current;
-
-// 	if (!args)
-// 		return (NULL);
-// 	count = 0;
-// 	current = args;
-// 	while (current)
-// 	{
-// 		count++;
-// 		current = current->next;
-// 	}
-// 	result = (char **)malloc(sizeof(char *) * (count + 1));
-// 	if (!result)
-// 		return (NULL);
-// 	i = 0;
-// 	current = args;
-// 	while (current)
-// 	{
-// 		result[i] = current->value;
-// 		current = current->next;
-// 		i++;
-// 	}
-// 	result[i] = NULL;
-// 	return (result);
-// }
 
 void	update_exit_status(t_shell *shell, int last_status, int sig_int,
 		int sig_quit)
