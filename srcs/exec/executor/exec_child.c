@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:13:41 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/13 16:21:17 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/13 17:02:21 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,16 @@ void	child_process(t_command *cmd, t_shell *shell, int prev[2], int curr[2])
 // 	update_exit_status(shell, last_status, sig[0], sig[1]);
 // }
 
+
 void	wait_all_children(pid_t last_pid, t_shell *shell)
 {
 	pid_t	wpid;
 	int		status;
 	int		last_status;
-	int		last_sig_int;
+	int		any_sig_int;
 	int		last_sig_quit;
 
-	last_sig_int = 0;
+	any_sig_int = 0;
 	last_sig_quit = 0;
 	last_status = 0;
 	signal(SIGINT, SIG_IGN);
@@ -111,18 +112,17 @@ void	wait_all_children(pid_t last_pid, t_shell *shell)
 		wpid = waitpid(-1, &status, 0);
 		if (wpid == -1)
 			break ;
+		/* Vérifier SIGINT pour N'IMPORTE QUEL processus */
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			any_sig_int = 1;
+		/* Vérifier SIGQUIT SEULEMENT pour le dernier processus */
 		if (wpid == last_pid)
 		{
 			last_status = status;
-			if (WIFSIGNALED(status))
-			{
-				if (WTERMSIG(status) == SIGINT)
-					last_sig_int = 1;
-				else if (WTERMSIG(status) == SIGQUIT)
-					last_sig_quit = 1;
-			}
+			if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+				last_sig_quit = 1;
 		}
 	}
 	setup_prompt_signal();
-	update_exit_status(shell, last_status, last_sig_int, last_sig_quit);
+	update_exit_status(shell, last_status, any_sig_int, last_sig_quit);
 }
