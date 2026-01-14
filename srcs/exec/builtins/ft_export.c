@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
+/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:37:54 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/13 22:33:10 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/14 16:13:05 by tarandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
-
-static void	print_export(t_shell *shell)
-{
-	t_env	*current;
-
-	current = shell->env;
-	while (current)
-	{
-		if (current->value && *current->value)
-			printf("declare -x %s=\"%s\"\n", current->key, current->value);
-		else
-			printf("declare -x %s\n", current->key);
-		current = current->next;
-	}
-}
 
 static int	is_append_mode(const char *arg)
 {
@@ -88,7 +73,7 @@ int	ft_export(t_shell *shell, char **args)
 
 	if (!args[1])
 	{
-		print_export(shell);
+		export_onl(shell);
 		return (0);
 	}
 	i = 1;
