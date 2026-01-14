@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/14 14:47:27 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/14 21:53:52 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,16 @@ void	check_special_cases(char *cmd, t_shell *shell, char **args_array)
 
 void	handle_command_not_found(char *cmd, char **args, t_shell *shell)
 {
+	char *path_var = get_env_value(shell->env, "PATH");
+
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found\n", 2);
+
+	// ✅ Message adapté selon PATH
+	if (!path_var)
+		ft_putstr_fd(": No such file or directory\n", 2);
+	else
+		ft_putstr_fd(": command not found\n", 2);
 	free(args);
 	cleanup_child(shell);
 	exit(127);
