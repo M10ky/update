@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 11:01:22 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/15 21:07:29 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 15:10:28 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,9 @@ char	*get_new_pwd_relative(char *old_pwd, char *new_dir);
 char	*try_cwd_path(char *cmd);
 void	check_dot_cases(char *cmd, t_shell *shell, char **args_array);
 char	*get_old_pwd(t_env *env);
+void	update_pwd_after_cd(t_env *env, char *old_pwd);
+int		handle_input_redirections(t_redir *input_list);
+int		check_redir(t_command *cmd, t_redir *last_hd, t_redir *last_in);
+int		handle_chdir_failure(char *dir, char *old_pwd, t_env *env);
 
 #endif

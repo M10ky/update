@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 21:31:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/16 09:48:21 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 14:14:53 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,26 +48,11 @@ void	update_pwd_vars(t_env *env, char *old_pwd, char *new_dir)
 	}
 }
 
-// static char	*build_unnormalized_path(char *old_pwd, char *new_dir)
-// {
-// 	char	*temp;
-// 	char	*result;
-
-// 	if (!old_pwd || !new_dir)
-// 		return (NULL);
-// 	if (new_dir[0] == '/')
-// 		return (ft_strdup(new_dir));
-// 	temp = ft_strjoin(old_pwd, "/");
-// 	if (!temp)
-// 		return (NULL);
-// 	result = ft_strjoin(temp, new_dir);
-// 	free(temp);
-// 	return (result);
-// }
 void	update_pwd_vars_unnormalized(t_env *env, char *old_pwd, char *new_dir)
 {
 	char	*new_pwd;
 	int		found_oldpwd;
+	char	*temp;
 
 	found_oldpwd = 0;
 	handle_oldpwd_update(env, old_pwd, &found_oldpwd);
@@ -77,7 +62,7 @@ void	update_pwd_vars_unnormalized(t_env *env, char *old_pwd, char *new_dir)
 		new_pwd = ft_strdup(new_dir);
 	else
 	{
-		char *temp = ft_strjoin(old_pwd, "/");
+		temp = ft_strjoin(old_pwd, "/");
 		if (!temp)
 			return ;
 		new_pwd = ft_strjoin(temp, new_dir);
