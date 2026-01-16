@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:37:54 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/15 12:05:11 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/16 13:54:13 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,54 @@ static int	handle_append_export(t_shell *shell, char *key, char *value)
 	return (0);
 }
 
-static int	process_export_arg(t_shell *shell, char *arg)
+static int process_export_arg(t_shell *shell, char *arg)
 {
-	char	*key;
-	char	*value;
-	int		append;
+    char    *key;
+    char    *value;
+    int     append;
+    t_env   *existing;
 
-	append = is_append_mode(arg);
-	key = extract_key(arg);
-	value = extract_value(arg);
-	if (append && value)
-		handle_append_export(shell, key, value);
-	else if (value)
-	{
-		update_or_add_env(shell, key, value);
-		free(value);
-	}
-	else
-		update_or_add_env(shell, key, NULL);
-	free(key);
-	return (0);
+    append = is_append_mode(arg);
+    key = extract_key(arg);
+    value = extract_value(arg);  // NULL si pas de '='
+
+    // ✅ Chercher si la variable existe
+    existing = shell->env;
+    while (existing)
+    {
+        if (ft_strcmp(existing->key, key) == 0)
+        {
+            existing->exported = 1;  // ✅ Toujours marquer comme exportée
+
+            if (value != NULL)  // ✅ Seulement si '=' présent
+            {
+                if (append)
+                    handle_append_export(shell, key, value);
+                else
+                {
+                    free(existing->value);
+                    existing->value = ft_strdup(value);  // Peut être ""
+                }
+                free(value);
+            }
+            // ✅ Sinon, garder la valeur actuelle (ou NULL)
+
+            free(key);
+            return (0);
+        }
+        existing = existing->next;
+    }
+
+    // ✅ Variable n'existe pas
+    if (append && value)
+        handle_append_export(shell, key, value);
+    else
+        update_or_add_env(shell, key, value);  // value peut être NULL
+
+    free(key);
+    if (value)
+        free(value);
+    return (0);
 }
 
 int	ft_export(t_shell *shell, char **args)

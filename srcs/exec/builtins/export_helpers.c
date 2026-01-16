@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 23:05:52 by tarandri          #+#    #+#             */
-/*   Updated: 2026/01/15 12:04:50 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/16 13:52:11 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_env	*exp_create_env_node(const char *key, const char *value)
 		new_node->value = strdup(value);
 	else
 		new_node->value = NULL;
+	new_node->exported = 0;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -60,27 +61,37 @@ char	*extract_value(const char *arg)
 	value = ft_strdup(equal_sign + 1);
 	return (value);
 }
-
-int	update_or_add_env(t_shell *shell, char *key, char *value)
+int update_or_add_env(t_shell *shell, char *key, char *value)
 {
-	t_env	*current;
+    t_env   *current;
 
-	current = shell->env;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-		{
-			free(current->value);
-			if (value)
-				current->value = ft_strdup(value);
-			else
-				current->value = NULL;
-			return (0);
-		}
-		current = current->next;
-	}
-	exp_add_env_node_back(&shell->env, exp_create_env_node(key, value));
-	return (0);
+    current = shell->env;
+    while (current)
+    {
+        if (ft_strcmp(current->key, key) == 0)
+        {
+            free(current->value);
+            if (value)
+                current->value = ft_strdup(value);
+            else
+                current->value = NULL;
+            current->exported = 1;  // ✅ AJOUTER CETTE LIGNE
+            return (0);
+        }
+        current = current->next;
+    }
+
+    // ✅ Créer nouveau nœud avec exported=1
+    exp_add_env_node_back(&shell->env, exp_create_env_node(key, value));
+
+    // ✅ Marquer comme exporté
+    current = shell->env;
+    while (current && current->next)
+        current = current->next;
+    if (current)
+        current->exported = 1;
+
+    return (0);
 }
 
 int	is_valid_identifier_export(const char *str)

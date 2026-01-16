@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 21:31:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/16 09:01:06 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 13:49:30 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,14 @@ int builtin_pwd(t_shell *shell)
     return (1);
 }
 
-int	builtin_env(t_env *env)
+int builtin_env(t_env *env)
 {
-	while (env)
-	{
-		if (env->value && env->value[0] != '\0')
-			printf("%s=%s\n", env->key, env->value);
-		env = env->next;
-	}
-	return (0);
+    while (env)
+    {
+        // ✅ Afficher UNIQUEMENT si exportée ET a une valeur
+        if (env->exported && env->value != NULL)
+            printf("%s=%s\n", env->key, env->value);
+        env = env->next;
+    }
+    return (0);
 }

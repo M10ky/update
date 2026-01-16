@@ -1,4 +1,4 @@
-1- VITA
+1- VITA testena sisa
 miokrako@c1r7s1:~/Music/br$ bash | wc -l
 miokrako@c1r7s1:~/Music/br$
 miokrako@c1r7s1:~/Music/br$
@@ -18,7 +18,7 @@ minishell: ghello: command not found
 miokrako@c1r7s1:~/Music/br$
 
 
-2- VITA
+2- VITA testena sisa
 minishell$> cat < sdgjk
 minishell: sdgjk: No such file or directory
 boucle infinie ne renvoie pas de prompt
@@ -27,7 +27,7 @@ miokrako@c1r7s1:~/Music/br$ cat < fgjhfjkd
 bash: fgjhfjkd: No such file or directory
 miokrako@c1r7s1:~/Music/br$
 
-3-
+3- VITA testena sisa
 bash:
 miokrako@c1r7s1:~/Music/br$ export eval
 miokrako@c1r7s1:~/Music/br$ export | grep eval
@@ -51,7 +51,40 @@ minishell$> export | grep eval
 declare -x eval
 minishell$>
 
-4- VITA
+ETOO
+bash-5.2$ export eval
+bash-5.2$ export | grep eval
+export eval
+bash-5.2$ env | grep eval
+bash-5.2$ export eval=
+bash-5.2$ export | grep eval
+export eval=""
+bash-5.2$ env | grep eval
+eval=
+bash-5.2$ export eval=42
+bash-5.2$ env | grep eval
+eval=42
+bash-5.2$ export | grep eval
+export eval="42"
+bash-5.2$ export eval=
+bash-5.2$ env | grep eval
+eval=
+bash-5.2$ export | grep eval
+export eval=""
+bash-5.2$ export eval=1
+bash-5.2$ env | grep eval
+eval=1
+bash-5.2$ export | grep eval
+export eval="1"
+bash-5.2$ export eval
+bash-5.2$ env | grep eval
+eval=1
+bash-5.2$ export | grep eval
+export eval="1"
+bash-5.2$
+
+
+4- VITA testena sisa
 minishell$> cat < fsjfgk > que
 minishell: fsjfgk: No such file or directory
 
@@ -69,7 +102,7 @@ miokrako@c1r7s1:~/Music/br$
 
 bash ne cree pas le fichier 'qui'
 
-5- VITA
+5- VITA testena sisa
 sudo
 minishell$> sudo
 minishell: sudo: command not found
