@@ -6,23 +6,31 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 08:12:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/14 21:53:52 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/15 11:52:24 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
 
-void	update_exit_status(t_shell *shell, int last_status, int sig_int,
-		int sig_quit)
+void	update_exit_status(t_shell *shell, int last_status,
+	int sig_int, int sig_quit)
 {
-	if (WIFEXITED(last_status))
-		shell->last_exit_status = WEXITSTATUS(last_status);
-	else if (WIFSIGNALED(last_status))
-		shell->last_exit_status = 128 + WTERMSIG(last_status);
 	if (sig_int)
 		write(1, "\n", 1);
-	else if (sig_quit)
+	if (sig_quit)
+	{
+		shell->last_exit_status = 131;
 		ft_putstr_fd("Quit (core dumped)\n", 2);
+		return ;
+	}
+	if (WIFEXITED(last_status))
+	{
+		shell->last_exit_status = WEXITSTATUS(last_status);
+	}
+	else if (WIFSIGNALED(last_status))
+	{
+		shell->last_exit_status = 128 + WTERMSIG(last_status);
+	}
 }
 
 void	setup_pipes(t_command *cmd, int prev_pipe[2], int curr_pipe[2])
@@ -46,57 +54,35 @@ void	setup_pipes(t_command *cmd, int prev_pipe[2], int curr_pipe[2])
 	}
 }
 
-char	*get_path(t_env *env, char *cmd)
+static void	check_path_existence(char *cmd, t_shell *shell, char **args_array)
 {
-	char	*path_var;
-	char	**paths;
-	char	*result;
-
-	if (cmd[0] == '\0')
-		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, F_OK) == -1)
-			return (NULL);
-		return (ft_strdup(cmd));
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			free(args_array);
+			cleanup_child(shell);
+			exit(127);
+		}
 	}
-	path_var = get_env_value(env, "PATH");
-	if (!path_var)
-		return (NULL);
-	paths = ft_split(path_var, ':');
-	if (!paths)
-		return (NULL);
-	result = try_paths(paths, cmd);
-	free_tab(paths);
-	return (result);
 }
 
 void	check_special_cases(char *cmd, t_shell *shell, char **args_array)
 {
-	if (ft_strcmp(cmd, ".") == 0)
-	{
-		ft_putstr_fd("minishell: .: command not found\n", 2);
-		free(args_array);
-		cleanup_child(shell);
-		exit(127);
-	}
-	if (ft_strcmp(cmd, "..") == 0)
-	{
-		ft_putstr_fd("minishell: ..: command not found\n", 2);
-		free(args_array);
-		cleanup_child(shell);
-		exit(127);
-	}
+	check_dot_cases(cmd, shell, args_array);
+	check_path_existence(cmd, shell, args_array);
 }
 
 void	handle_command_not_found(char *cmd, char **args, t_shell *shell)
 {
-	char *path_var = get_env_value(shell->env, "PATH");
+	char	*path_var;
 
+	path_var = get_env_value(shell->env, "PATH");
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
-
-	// ✅ Message adapté selon PATH
 	if (!path_var)
 		ft_putstr_fd(": No such file or directory\n", 2);
 	else

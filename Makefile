@@ -45,6 +45,7 @@ SRCS_EXEC    = srcs/exec/executor/exec.c \
               srcs/exec/builtins/ft_exit.c \
               srcs/exec/builtins/ft_export.c \
               srcs/exec/builtins/ft_export_utils.c \
+              srcs/exec/builtins/ft_pwd_utils.c \
               srcs/exec/builtins/ft_unset.c \
               srcs/exec/builtins/ft_update_pwd.c \
               srcs/exec/redirection/handle_redirection.c \

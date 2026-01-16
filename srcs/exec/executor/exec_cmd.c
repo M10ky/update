@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:32:05 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/14 21:52:36 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/15 10:17:25 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	exec_simple_cmd_with_array(t_command *cmd, t_env *env,
 		handle_command_not_found(args_array[0], args_array, shell);
 	handle_exec_error(args_array[0], path, args_array, shell);
 	env_tab = env_to_tab(env);
-	if (!env_tab)  // ✅ Erreur malloc critique
+	if (!env_tab)
 	{
 		perror("minishell: malloc");
 		free(path);
@@ -109,7 +109,7 @@ void	exec_simple_cmd_with_array(t_command *cmd, t_env *env,
 		cleanup_child(shell);
 		exit(1);
 	}
-execve(path, args_array, env_tab);
+	execve(path, args_array, env_tab);
 	try_shell_exec(path, env_tab);
 	perror("minishell");
 	free(path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarandri <tarandri@student.42antananarivo. +#+  +:+       +#+        */
+/*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 13:32:52 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/14 22:14:11 by tarandri         ###   ########.fr       */
+/*   Updated: 2026/01/16 08:11:58 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,11 @@ static int	handle_all_output_redirections(t_redir *output_list)
 	return (0);
 }
 
-int	handle_redirections(t_command *cmd)
+static int	check_redir(t_command *cmd, t_redir *last_hd, t_redir *last_in)
 {
-	t_redir	*last_hd;
-	t_redir	*last_in;
-	int		ret;
+	int	ret;
 
-	if (!cmd)
-		return (0);
-	last_hd = NULL;
-	last_in = NULL;
 	ret = 0;
-	if (cmd->heredoc)
-		last_hd = get_last_redir(cmd->heredoc);
-	if (cmd->input_redirection)
-		last_in = get_last_redir(cmd->input_redirection);
 	if (last_hd && last_in)
 	{
 		if (last_hd->index > last_in->index)
@@ -93,12 +83,87 @@ int	handle_redirections(t_command *cmd)
 	else if (last_in)
 		ret = handle_input_redirections(cmd->input_redirection);
 
+	return (ret);  // ✅ Retourner la valeur
+}
+static int	validate_input_redirection(t_redir *input_list)
+{
+	t_redir	*last_redir;
+
+	if (!input_list)
+		return (0);
+
+	last_redir = get_last_redir(input_list);
+	if (!last_redir || !last_redir->file)
+		return (1);
+
+	// ✅ Juste tester l'accès, sans ouvrir
+	if (access(last_redir->file, F_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(last_redir->file, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
+		return (1);
+	}
+
+	if (access(last_redir->file, R_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(last_redir->file, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		return (1);
+	}
+
+	return (0);
+}
+
+int	handle_redirections(t_command *cmd)
+{
+	t_redir	*last_hd;
+	t_redir	*last_in;
+	int		ret;
+
+	if (!cmd)
+		return (0);
+
+	// ✅ PHASE 1 : VALIDATION (sans créer de fichiers)
+	last_hd = NULL;
+	last_in = NULL;
+
+	if (cmd->heredoc)
+		last_hd = get_last_redir(cmd->heredoc);
+	if (cmd->input_redirection)
+		last_in = get_last_redir(cmd->input_redirection);
+
+	// ✅ Valider l'entrée AVANT tout
+	if (last_hd && last_in)
+	{
+		if (last_hd->index > last_in->index)
+			ret = validate_input_redirection(cmd->heredoc);
+		else
+			ret = validate_input_redirection(cmd->input_redirection);
+	}
+	else if (last_hd)
+		ret = validate_input_redirection(cmd->heredoc);
+	else if (last_in)
+		ret = validate_input_redirection(cmd->input_redirection);
+	else
+		ret = 0;
+
+	if (ret != 0)
+		return (1);  // ✅ Arrêt AVANT de créer les fichiers de sortie
+
+	// ✅ PHASE 2 : APPLICATION (créer et appliquer)
+	ret = check_redir(cmd, last_hd, last_in);
 	if (ret != 0)
 		return (1);
+
 	if (cmd->output_redirection)
 	{
 		if (handle_all_output_redirections(cmd->output_redirection))
 			return (1);
 	}
+
 	return (0);
 }
