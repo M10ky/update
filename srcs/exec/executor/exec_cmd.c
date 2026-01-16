@@ -6,46 +6,11 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:32:05 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/16 14:36:43 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 21:19:02 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
-
-char	*try_paths(char **paths, char *cmd)
-{
-	char	*part_path;
-	char	*full_path;
-	char	*permission_denied;
-	int		i;
-
-	i = 0;
-	permission_denied = NULL;
-	while (paths[i])
-	{
-		part_path = ft_strjoin(paths[i], "/");
-		if (!part_path)
-			return (NULL);
-		full_path = ft_strjoin(part_path, cmd);
-		free(part_path);
-		if (!full_path)
-			return (NULL);
-		if (access(full_path, F_OK) == 0)
-		{
-			if (access(full_path, X_OK) == 0)
-			{
-				if (permission_denied)
-					free(permission_denied);
-				return (full_path);
-			}
-			if (!permission_denied)
-				permission_denied = ft_strdup(full_path);
-		}
-		free(full_path);
-		i++;
-	}
-	return (permission_denied);
-}
 
 static void	cleanup_and_exit(char *path, char **args_array,
 	t_shell *shell, int code)

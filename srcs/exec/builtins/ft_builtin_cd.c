@@ -6,35 +6,11 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 21:31:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/16 16:04:25 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 21:03:22 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/exec.h"
-
-static int	cd_error_no_home(char *old_pwd)
-{
-	ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-	if (old_pwd)
-		free(old_pwd);
-	return (1);
-}
-
-static char	*resolve_dotdot_logical(char *pwd)
-{
-	char	*last_slash;
-	char	*result;
-
-	if (!pwd || pwd[0] != '/')
-		return (NULL);
-	if (ft_strcmp(pwd, "/") == 0)
-		return (ft_strdup("/"));
-	last_slash = ft_strrchr(pwd, '/');
-	if (!last_slash || last_slash == pwd)
-		return (ft_strdup("/"));
-	result = ft_strndup(pwd, last_slash - pwd);
-	return (result);
-}
 
 static char	*make_absolute_path(char *old_pwd, char *dir)
 {
@@ -76,28 +52,10 @@ static int	try_logical_cd(char *old_pwd, char *dir, t_env *env)
 	return (-1);
 }
 
-int	builtin_cd(char **args, t_env *env)
+static int	execute_cd(char *dir, char *old_pwd_copy, t_env *env)
 {
-	char	*dir;
-	char	*old_pwd_val;
-	char	*old_pwd_copy;
-	int		ret;
+	int	ret;
 
-	if (!args || !args[1])
-	{
-		dir = get_env_value(env, "HOME");
-		if (!dir)
-			return (cd_error_no_home(NULL));
-	}
-	else
-		dir = args[1];
-	old_pwd_val = get_env_value(env, "PWD");
-	if (!old_pwd_val)
-		old_pwd_copy = getcwd(NULL, 0);
-	else
-		old_pwd_copy = ft_strdup(old_pwd_val);
-	if (!old_pwd_copy)
-		return (1);
 	ret = try_logical_cd(old_pwd_copy, dir, env);
 	if (ret == 0)
 	{
@@ -108,4 +66,18 @@ int	builtin_cd(char **args, t_env *env)
 		return (handle_chdir_failure(dir, old_pwd_copy, env));
 	update_pwd_after_cd(env, old_pwd_copy);
 	return (0);
+}
+
+int	builtin_cd(char **args, t_env *env)
+{
+	char	*dir;
+	char	*old_pwd_copy;
+
+	dir = get_target_directory(args, env);
+	if (!dir)
+		return (1);
+	old_pwd_copy = save_current_pwd(env);
+	if (!old_pwd_copy)
+		return (1);
+	return (execute_cd(dir, old_pwd_copy, env));
 }

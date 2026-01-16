@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 21:32:09 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/16 09:46:31 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 20:53:10 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	check_parent_builtin(char *cmd, t_shell *shell)
 	return (is_parent_builtin(cmd, shell));
 }
 
-// builtins.c
 char	*get_old_pwd(t_env *env)
 {
 	char	*old_pwd;
