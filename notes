@@ -83,6 +83,44 @@ bash-5.2$ export | grep eval
 export eval="1"
 bash-5.2$
 
+minishell$> export eval
+minishell$> export | grep eval
+declare -x eval
+minishell$> env | grep eval
+minishell$> export eval=
+minishell$> export | grep eval
+declare -x eval=""
+minishell$> env | grep eval
+eval=
+minishell$> export eval=42
+minishell$> env | grep eval
+eval=42
+minishell$> export eval=42
+minishell$> env | grep eval
+eval=42
+minishell$> export | grep eval
+declare -x eval="42"
+minishell$> export eval=
+minishell$> env | grep eval
+eval=
+minishell$> export | grep eval
+declare -x eval=""
+minishell$> export eval=1
+minishell$> env | grep eval
+eval=1
+minishell$> export | grep eval
+declare -x eval="1"
+minishell$> export eval
+minishell$> env | grep eval
+eval=1
+minishell$> export | grep eval
+declare -x eval="1"
+minishell$> ^C
+minishell$>
+
+
+
+
 
 4- VITA testena sisa
 minishell$> cat < fsjfgk > que
