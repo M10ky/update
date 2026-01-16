@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 21:31:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/16 10:08:20 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 12:21:45 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,46 +19,6 @@ static int	cd_error_no_home(char *old_pwd)
 	return (1);
 }
 
-static int	cd_error_chdir(char *dir, char *old_pwd)
-{
-	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(dir, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(strerror(errno), 2);
-	ft_putstr_fd("\n", 2);
-	free(old_pwd);
-	return (1);
-}
-
-// static int	handle_getcwd_failure(t_env *env, char *old_pwd, char *dir)
-// {
-// 	ft_putstr_fd("cd: error retrieving current directory: ", 2);
-// 	ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-// 	ft_putstr_fd("No such file or directory\n", 2);
-// 	update_pwd_vars_unnormalized(env, old_pwd, dir);
-// 	free(old_pwd);
-// 	return (0);
-// }
-
-static int	finalize_cd(t_env *env, char *old_pwd, char *dir)
-{
-	char	*test_cwd;
-
-	test_cwd = getcwd(NULL, 0);
-	if (!test_cwd)
-	{
-		ft_putstr_fd("cd: error retrieving current directory: ", 2);
-		ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-		ft_putstr_fd("No such file or directory\n", 2);
-		update_pwd_vars_unnormalized(env, old_pwd, dir);
-		free(old_pwd);
-		return (0);
-	}
-	free(test_cwd);
-	update_pwd_vars(env, old_pwd, dir);
-	free(old_pwd);
-	return (0);
-}
 static char	*resolve_dotdot_logical(char *pwd)
 {
 	char	*last_slash;
@@ -75,7 +35,6 @@ static char	*resolve_dotdot_logical(char *pwd)
 	return (result);
 }
 
-/* Convertit un chemin relatif en absolu en utilisant $PWD */
 static char	*make_absolute_path(char *old_pwd, char *dir)
 {
 	char	*temp;
@@ -95,41 +54,69 @@ static char	*make_absolute_path(char *old_pwd, char *dir)
 	return (result);
 }
 
-int	builtin_cd(char **args, t_env *env)
+int builtin_cd(char **args, t_env *env)
 {
-	char	*dir;
-	char	*old_pwd;
-	char	*absolute_path;
+    char *dir;
+    char *old_pwd_val;
+    char *target_path;
+    int  chdir_ret;
 
-	old_pwd = get_old_pwd(env);
-	if (!old_pwd)
-	{
-		ft_putstr_fd("cd: error retrieving current directory: ", 2);
-		ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-		ft_putstr_fd("No such file or directory\n", 2);
-		return (1);
-	}
-	if (!args || !args[1])
-		dir = get_env_value(env, "HOME");
-	else
-		dir = args[1];
-	if (!dir)
-		return (cd_error_no_home(old_pwd));
+    // 1. Déterminer la cible
+    if (!args || !args[1])
+    {
+        dir = get_env_value(env, "HOME");
+        if (!dir)
+            return (cd_error_no_home(NULL));
+    else
+        dir = args[1];
+    old_pwd_val = get_env_value(env, "PWD");
+    if (!old_pwd_val)
+        old_pwd_val = getcwd(NULL, 0); // Repli si pas de var PWD
+    target_path = NULL;
+    chdir_ret = -1;
 
-	/* Convertir en chemin absolu en utilisant $PWD */
-	absolute_path = make_absolute_path(old_pwd, dir);
-	if (!absolute_path)
-		return (cd_error_chdir(dir, old_pwd));
+    if (old_pwd_val && dir[0] != '/')
+    {
+        target_path = make_absolute_path(old_pwd_val, dir); // Votre fonction existante
+        if (target_path)
+        {
+            chdir_ret = chdir(target_path);
+            if (chdir_ret == 0)
+            {
+                update_pwd_vars(env, old_pwd_val, target_path); // Met à jour PWD avec le chemin logique
+                free(target_path);
+                if (old_pwd_val && old_pwd_val != get_env_value(env, "PWD")) free(old_pwd_val);
+                return (0);
+            }
+            free(target_path); // Échec logique (dossier n'existe pas, etc.)
+        }
+    }
+    chdir_ret = chdir(dir);
 
-	/* Essayer chdir() avec le chemin absolu */
-	if (chdir(absolute_path) != 0)
-	{
-		free(absolute_path);
-		return (cd_error_chdir(dir, old_pwd));
-	}
+    if (chdir_ret != 0)
+    {
+        ft_putstr_fd("minishell: cd: ", 2);
+        perror(dir);
+        if (old_pwd_val && old_pwd_val != get_env_value(env, "PWD"))
+			free(old_pwd_val);
+        return (1);
+    }
 
-	/* Mettre à jour PWD avec le chemin relatif original */
-	finalize_cd(env, old_pwd, dir);
-	free(absolute_path);
-	return (0);
+    char *cwd = getcwd(NULL, 0);
+    if (!cwd)
+    {
+        ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 2);
+    }
+    else
+    {
+        update_env_var(env, "PWD", cwd);
+        free(cwd);
+    }
+    if (old_pwd_val)
+    {
+        update_env_var(env, "OLDPWD", old_pwd_val);
+        if (old_pwd_val != get_env_value(env, "PWD"))
+			free(old_pwd_val);
+    }
+    return (0);
 }

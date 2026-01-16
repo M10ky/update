@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 20:32:05 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/15 10:17:25 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 12:20:33 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ char	*try_paths(char **paths, char *cmd)
 {
 	char	*part_path;
 	char	*full_path;
+	char	*candidate_permission_denied;
 	int		i;
 
 	i = 0;
+	candidate_permission_denied = NULL;
 	while (paths[i])
 	{
 		part_path = ft_strjoin(paths[i], "/");
@@ -28,12 +30,22 @@ char	*try_paths(char **paths, char *cmd)
 		free(part_path);
 		if (!full_path)
 			return (NULL);
-		if (access(full_path, F_OK | X_OK) == 0)
-			return (full_path);
+
+		if (access(full_path, F_OK) == 0)
+		{
+			if (access(full_path, X_OK) == 0)
+			{
+				if (candidate_permission_denied)
+					free(candidate_permission_denied);
+				return (full_path);
+			}
+			if (!candidate_permission_denied)
+				candidate_permission_denied = ft_strdup(full_path);
+		}
 		free(full_path);
 		i++;
 	}
-	return (NULL);
+	return (candidate_permission_denied);
 }
 
 static void	cleanup_and_exit(char *path, char **args_array,

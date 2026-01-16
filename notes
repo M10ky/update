@@ -131,7 +131,7 @@ test 2 avec unset
 minishell$> mkdir a a/b
 minishell$> cd a/b
 minishell$> rm -r ../../a
-minishell$> unset OLDPWD PWD
+minishell$> unset PWD OLDPWD
 minishell$> pwd
 pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 minishell$> cd ..
@@ -139,16 +139,10 @@ cd: error retrieving current directory: getcwd: cannot access parent directories
 minishell$> pwd
 pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 minishell$> cd ..
-cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 minishell$> pwd
-pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
-minishell$> cd ..
-cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
-minishell$> pwd
-pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
-minishell$> pwd
-pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
-ne sort jamais
+/home/mioky/Musique/Mioky
+minishell$>
+
 
 bash-5.2$ mkdir a a/b
 bash-5.2$ cd a/b
@@ -163,9 +157,9 @@ pwd : erreur de détermination du répertoire actuel : getcwd : ne peut accéder
 bash-5.2$ cd ..
 chdir : erreur de détermination du répertoire actuel : getcwd : ne peut accéder aux répertoires parents : Aucun fichier ou dossier de ce nom
 bash-5.2$ pwd
-/home/mioky/Musique/tapaka
+/home/mioky/Musique/Mioky
 bash-5.2$
-sort apres utilisation de cd
+
 
 
 
