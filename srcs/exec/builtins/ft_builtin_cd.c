@@ -6,7 +6,7 @@
 /*   By: miokrako <miokrako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 21:31:02 by miokrako          #+#    #+#             */
-/*   Updated: 2026/01/16 15:12:25 by miokrako         ###   ########.fr       */
+/*   Updated: 2026/01/16 16:04:25 by miokrako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 static int	cd_error_no_home(char *old_pwd)
 {
 	ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-	free(old_pwd);
+	if (old_pwd)
+		free(old_pwd);
 	return (1);
 }
 
@@ -79,6 +80,7 @@ int	builtin_cd(char **args, t_env *env)
 {
 	char	*dir;
 	char	*old_pwd_val;
+	char	*old_pwd_copy;
 	int		ret;
 
 	if (!args || !args[1])
@@ -91,12 +93,19 @@ int	builtin_cd(char **args, t_env *env)
 		dir = args[1];
 	old_pwd_val = get_env_value(env, "PWD");
 	if (!old_pwd_val)
-		old_pwd_val = getcwd(NULL, 0);
-	ret = try_logical_cd(old_pwd_val, dir, env);
+		old_pwd_copy = getcwd(NULL, 0);
+	else
+		old_pwd_copy = ft_strdup(old_pwd_val);
+	if (!old_pwd_copy)
+		return (1);
+	ret = try_logical_cd(old_pwd_copy, dir, env);
 	if (ret == 0)
+	{
+		free(old_pwd_copy);
 		return (0);
+	}
 	if (chdir(dir) != 0)
-		return (handle_chdir_failure(dir, old_pwd_val, env));
-	update_pwd_after_cd(env, old_pwd_val);
+		return (handle_chdir_failure(dir, old_pwd_copy, env));
+	update_pwd_after_cd(env, old_pwd_copy);
 	return (0);
 }
