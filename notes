@@ -69,7 +69,8 @@ miokrako@c1r7s1:~/Music/br$
 
 bash ne cree pas le fichier 'qui'
 
-5- sudo
+5- VITA
+sudo
 minishell$> sudo
 minishell: sudo: command not found
 minishell$> /bin/sudo
@@ -82,7 +83,7 @@ miokrako@c1r7s1:~/Music/br$ /bin/sudo
 bash: /bin/sudo: Permission denied
 miokrako@c1r7s1:~/Music/br$
 
-6-
+6- VITA testena sisa misy leaks
 
 test 1:
 minishell$> mkdir a a/b
